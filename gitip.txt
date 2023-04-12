@@ -1,0 +1,15 @@
+https://rogerdudler.github.io/git-guide/
+https://www.freecodecamp.org/news/error-src-refspec-master-does-not-match-any-how-to-fix-in-git/
+
+0.---Git Bash---
+//Kell egy könyvtár ahol a projekt lesz.	Tipp: Ha másik Drive-on ('C' helyett 'D') lesz a projekt akkor, cd /D/path/to/folder
+cd /path/to/folder		//Ez a mappa lesz úgymond feltöltve.
+git init
+git config --global user.name "John Doe"
+git config --global user.email johndoe@example.com
+
+---Fájl feltöltés GitHub-ra---
+git add *				//így minden fájlt ami a könyvtárban van azt addolja.
+git add filename.txt 	//így pedig csak azt a fájlt rakja fel, ami mi adunk meg.
+git commit -m "Vmi üzenet"
+git push origin master
