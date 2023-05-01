@@ -1,56 +1,279 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="600.0" maxWidth="500.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.chart.BarChart?>
+<AnchorPane fx:controller="com.uszogumi.uszogumi.HelloController" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Text layoutX="99.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Úszógumi Bérlő" />
-        <Text layoutX="48.0" layoutY="276.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Magasság" />
-        <TextField layoutX="121.0" layoutY="258.0" />
-        <Text layoutX="279.0" layoutY="276.0" strokeType="OUTSIDE" strokeWidth="0.0" text="cm" />
-        <Text layoutX="69.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kor" />
-        <TextField layoutX="121.0" layoutY="296.0" />
-        <Text layoutX="281.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="év" />
-        <Text layoutX="54.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Testsúly" />
-        <TextField layoutX="121.0" layoutY="336.0" />
-        <Text layoutX="280.0" layoutY="353.0" strokeType="OUTSIDE" strokeWidth="0.0" text="kg" />
-        <Text layoutX="60.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Neme:" />
-        <RadioButton layoutX="121.0" layoutY="375.0" mnemonicParsing="false" text="Férfi">
-            <toggleGroup>
-                <ToggleGroup fx:id="tgNeme" />
-            </toggleGroup></RadioButton>
-        <RadioButton layoutX="197.0" layoutY="375.0" mnemonicParsing="false" text="Nő" toggleGroup="$tgNeme" />
-        <Button layoutX="388.0" layoutY="524.0" mnemonicParsing="false" text="Elküld" />
-        <TabPane layoutX="297.0" layoutY="2.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab text="Eszközök">
+                <Tab fx:id="csekkolasTab" text="Csekkolás">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="142.0" prefWidth="194.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
                             <children>
-                                <Text layoutX="14.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Itt lehetne kiírva hogy hány szabad gumi van jelenleg" wrappingWidth="129.22796630859375" />
-                                <Text layoutX="14.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad mellények száma:" />
-                                <Text layoutX="178.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" />
+                                <VBox layoutX="40.0" layoutY="67.0" prefHeight="93.0" prefWidth="203.0">
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (gyerek) mellények száma:" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text fx:id="szabadGyerekMellenyek" layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" left="10.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (felnőtt) mellények száma:" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text fx:id="szabadFelnottMellenyek" layoutX="10.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" left="10.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad csónak száma:" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text fx:id="szabadCsonak" layoutX="10.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" left="10.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (gyerek) úszógumi száma:" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text fx:id="szabadGyerekGumi" layoutX="10.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" left="10.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (felnőtt) úszógumi száma:" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin></Text>
+                                        <Text fx:id="szabadFelnottGumi" layoutX="10.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets left="10.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <Button fx:id="csekkolasGomb" layoutX="90.0" layoutY="289.0" mnemonicParsing="false" text="Csekkolás" />
+                                <Separator layoutX="276.0" layoutY="49.0" orientation="VERTICAL" prefHeight="200.0" />
+                                <Text layoutX="380.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Azonnali eszköz foglalás" wrappingWidth="134.13671875" />
+                                <VBox layoutX="300.0" layoutY="49.0">
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Név:" wrappingWidth="28.13671875">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Text>
+                                        <TextField fx:id="azFogNev">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                            </VBox.margin>
+                                        </TextField>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Felnőtt(ek) száma:" wrappingWidth="101.13671875">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Text>
+                                        <TextField fx:id="azFelnottSzama" layoutX="10.0" layoutY="27.0">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </TextField>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Gyerek(ek) száma:" wrappingWidth="98.13671875">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Text>
+                                        <TextField fx:id="azGyermekSzama" layoutX="10.0" layoutY="97.0">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </TextField>
+                                        <CheckBox fx:id="csonakCheckBox" mnemonicParsing="false" text="Csónakot bérel">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                            </VBox.margin>
+                                        </CheckBox>
+                                        <RadioButton fx:id="mellenyRadio" mnemonicParsing="false" text="Úszómellény">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                            <toggleGroup>
+                                                <ToggleGroup fx:id="radiogombok" />
+                                            </toggleGroup>
+                                        </RadioButton>
+                                        <RadioButton fx:id="gumiRadio" mnemonicParsing="false" text="Úszógumi" toggleGroup="$radiogombok" />
+                                    </children>
+                                </VBox>
+                                <Button fx:id="azFoglalasGomb" layoutX="394.0" layoutY="289.0" mnemonicParsing="false" onAction="#AzFoglalas" text="Azonnali foglalás" />
                             </children>
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Egyéb">
+                <Tab text="Foglalás">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="170.0" prefWidth="199.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
                             <children>
-                                <Text layoutX="90.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lakatos Nintendo" />
-                                <Text layoutX="14.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Készítők:" />
-                                <Text layoutX="26.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lakatos Britniszpirsz" />
-                                <Text layoutX="86.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Májköl Dzsekszon" />
-                                <Text layoutX="26.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="II. Ferenc Ferdinánd" />
+                                <Text layoutX="46.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Név:" wrappingWidth="37.03125" />
+                                <TextField fx:id="foglaloNeve" layoutX="83.0" layoutY="78.0" promptText="Teszt Elek" />
+                                <Text layoutX="46.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hány főre szeretne foglalni?" wrappingWidth="152.03125" />
+                                <TextField fx:id="foglaloFo" layoutX="198.0" layoutY="113.0" prefHeight="25.0" prefWidth="72.0" promptText="(Max: 10)" />
+                                <Text layoutX="46.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ebből hány fő gyermek?" wrappingWidth="140.03125" />
+                                <TextField fx:id="foglaloGyermek" layoutX="198.0" layoutY="147.0" prefHeight="25.0" prefWidth="72.0" promptText="(Max: 9)" />
+                                <DatePicker fx:id="foglalasDatePicker" layoutX="213.0" layoutY="214.0" promptText="2023-05-01" />
+                                <Button fx:id="foglalasGomb" layoutX="270.0" layoutY="264.0" mnemonicParsing="false" text="Foglalás" />
+                                <Text layoutX="300.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A vásárló letudja foglalni előre a szükséges úszó eszközöket." wrappingWidth="276.03125" />
+                                <Text layoutX="300.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A gyerekeknek való eszköz bérléshez szükséges minimum 1 szülő. (0-14 éves korig számít gyermeknek.)" wrappingWidth="276.03125" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Foglalás módosítása">
+                    <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <Text layoutX="46.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Név:" wrappingWidth="37.03125" />
+                                <TextField fx:id="foglalasModNev" layoutX="83.0" layoutY="78.0" promptText="Teszt Elek" />
+                                <Text layoutX="46.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hány főre szeretne foglalni?" wrappingWidth="152.03125" />
+                                <TextField fx:id="foglalasModFo" layoutX="198.0" layoutY="113.0" prefHeight="25.0" prefWidth="72.0" promptText="(Max: 10)" />
+                                <Text layoutX="46.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ebből hány fő gyermek?" wrappingWidth="140.03125" />
+                                <TextField fx:id="foglalasModGyerek" layoutX="198.0" layoutY="147.0" prefHeight="25.0" prefWidth="72.0" promptText="(Max: 9)" />
+                                <DatePicker fx:id="foglalasModDatePicker" layoutX="213.0" layoutY="214.0" promptText="2023-05-01" />
+                                <Button fx:id="foglalasModGomb" layoutX="238.0" layoutY="267.0" mnemonicParsing="false" text="Foglalás módosítása" />
+                                <Text layoutX="300.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A vásárló módosítani tudja a már megadott foglalását." wrappingWidth="276.03125" />
+                                <Text layoutX="300.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A gyerekeknek való eszköz bérléshez szükséges minimum 1 szülő. (0-14 éves korig számít gyermeknek.)" wrappingWidth="276.03125" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Foglalás lemondása">
+                    <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <Text layoutX="46.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Név:" wrappingWidth="37.03125" />
+                                <TextField fx:id="foglalasDelNev" layoutX="83.0" layoutY="78.0" promptText="Teszt Elek" />
+                                <DatePicker fx:id="foglalasDelDatePicker" layoutX="158.0" layoutY="121.0" promptText="2023-05-01" />
+                                <Button fx:id="foglalasDelGomb" layoutX="240.0" layoutY="253.0" mnemonicParsing="false" text="Foglalás lemondása" />
+                                <Text layoutX="300.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A vásárló törölni tudja a foglalását." wrappingWidth="276.03125" />
+                                <Text layoutX="46.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás időpontja:" wrappingWidth="104.03125" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Készítők">
+                    <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <VBox layoutX="141.0" layoutY="36.0">
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Projekt Manager:">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Senior Java fejlesztő:" wrappingWidth="122.572265625">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Adatbázis fejlesztő:" wrappingWidth="122.572265625">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="QA tesztelő:">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tervezőgrafikus:">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SCRUM Master:">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <Text layoutX="287.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Csengeri Ákos" />
+                                <Line endX="100.0" layoutX="231.0" layoutY="184.0" startX="-100.0" />
+                                <Text layoutX="141.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="További készítők:" />
+                                <VBox layoutX="285.0" layoutY="205.0">
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ullmann Bence">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Forgács Nóra">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Babály Máté">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Leírás">
+                    <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <Text layoutX="15.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A &quot;Csekkolás&quot; fülön a gombra kattintva egy lekérdezés történik az adatbázisban és kiírásra kerül az éppen aktuálisan szabad eszközök száma." wrappingWidth="570.1484375" />
+                                <Text layoutX="15.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A &quot;Foglalás&quot; fülön egy megadott napon a vásárló képés előre lefoglalni az úszóeszközöket." wrappingWidth="570.1484375" />
+                                <Text layoutX="15.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ugyanazon a fülön egy &quot;Azonnali foglalás&quot; opció is rendelkezésre áll, ahol értelemszerűen a megadott adatok alapján bérelni lehet. A fizetés pedig a kasszánál történik. (Fontos: ez egy kissebb strand és a program is kezdetleges, így kérem vegyék figyelembe, hogy vagy-vagy alapon mükődik az úszógumi és mellény bérlés. Megértésüket köszönjük.)" wrappingWidth="570.1484375" />
+                                <Text layoutX="15.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A &quot;Foglalás módosítás&quot; és &quot;Foglalás lemondás&quot; fül magáért beszél. Meg kell adni a már korábban megadott foglaló nevét és vagy módosítani lehet a foglalást vagy pedig akár törölni az egészet." wrappingWidth="570.1484375" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="A munka folyamatról">
+                    <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <BarChart fx:id="barChart" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                    </yAxis>
+                                </BarChart>
                             </children>
                         </AnchorPane>
                     </content>
