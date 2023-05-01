@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
@@ -34,9 +35,9 @@
                                                 <Insets />
                                             </VBox.margin>
                                         </Text>
-                                        <Text fx:id="szabadGyerekMellenyek" layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="202.13671875">
+                                        <Text fx:id="szabadGyerekMellenyek" layoutX="20.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="202.13671875">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" left="10.0" />
+                                                <Insets bottom="5.0" left="20.0" top="5.0" />
                                             </VBox.margin>
                                         </Text>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (felnőtt) mellények száma:" wrappingWidth="202.13671875">
@@ -46,7 +47,7 @@
                                         </Text>
                                         <Text fx:id="szabadFelnottMellenyek" layoutX="10.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="202.13671875">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" left="10.0" />
+                                                <Insets bottom="5.0" left="20.0" top="5.0" />
                                             </VBox.margin>
                                         </Text>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad csónak száma:" wrappingWidth="202.13671875">
@@ -56,7 +57,7 @@
                                         </Text>
                                         <Text fx:id="szabadCsonak" layoutX="10.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3" wrappingWidth="202.13671875">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" left="10.0" />
+                                                <Insets bottom="5.0" left="20.0" top="5.0" />
                                             </VBox.margin>
                                         </Text>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (gyerek) úszógumi száma:" wrappingWidth="202.13671875">
@@ -66,7 +67,7 @@
                                         </Text>
                                         <Text fx:id="szabadGyerekGumi" layoutX="10.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="202.13671875">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" left="10.0" />
+                                                <Insets bottom="5.0" left="20.0" top="5.0" />
                                             </VBox.margin>
                                         </Text>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (felnőtt) úszógumi száma:" wrappingWidth="202.13671875">
@@ -75,12 +76,12 @@
                                             </VBox.margin></Text>
                                         <Text fx:id="szabadFelnottGumi" layoutX="10.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5" wrappingWidth="202.13671875">
                                             <VBox.margin>
-                                                <Insets left="10.0" />
+                                                <Insets bottom="5.0" left="20.0" top="5.0" />
                                             </VBox.margin>
                                         </Text>
                                     </children>
                                 </VBox>
-                                <Button fx:id="csekkolasGomb" layoutX="90.0" layoutY="289.0" mnemonicParsing="false" text="Csekkolás" />
+                                <Button fx:id="csekkolasGomb" layoutX="90.0" layoutY="289.0" mnemonicParsing="false" onAction="#handleCsekkolasGomb" text="Csekkolás" />
                                 <Separator layoutX="276.0" layoutY="49.0" orientation="VERTICAL" prefHeight="200.0" />
                                 <Text layoutX="380.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Azonnali eszköz foglalás" wrappingWidth="134.13671875" />
                                 <VBox layoutX="300.0" layoutY="49.0">
@@ -179,7 +180,7 @@
                                 <Text layoutX="46.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Név:" wrappingWidth="37.03125" />
                                 <TextField fx:id="foglalasDelNev" layoutX="83.0" layoutY="78.0" promptText="Teszt Elek" />
                                 <DatePicker fx:id="foglalasDelDatePicker" layoutX="158.0" layoutY="121.0" promptText="2023-05-01" />
-                                <Button fx:id="foglalasDelGomb" layoutX="240.0" layoutY="253.0" mnemonicParsing="false" text="Foglalás lemondása" />
+                                <Button fx:id="foglalasDelGomb" layoutX="240.0" layoutY="253.0" mnemonicParsing="false" onAction="#handleFoglalasDelGomb" text="Foglalás lemondása" />
                                 <Text layoutX="300.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A vásárló törölni tudja a foglalását." wrappingWidth="276.03125" />
                                 <Text layoutX="46.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás időpontja:" wrappingWidth="104.03125" />
                             </children>

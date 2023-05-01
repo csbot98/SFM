@@ -1,4 +1,5 @@
 package com.uszogumi.uszogumi;
+import java.sql.*;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,9 +16,27 @@ public class HelloApplication extends Application {
         stage.setTitle("Úszó BiszBasz Bérlő!");
         stage.setScene(scene);
         stage.show();
-    }
 
-    public static void main(String[] args) {
-        launch();
+        String url = "jdbc:mysql://localhost:3306/test"; // adatbázis elérési útvonala
+        //String url ="jdbc:postgresql://rogue.db.elephantsql.com:5432/alirdwit";
+        String user = "root"; // adatbázis felhasználó neve
+        //String user ="alirdwit";
+        String password = ""; // adatbázis jelszó (ha van)
+        //String password = "xR9tAtXzVj6DON-LTQiQbZaCL2aWVLSG";
+
+        try {
+
+            Connection conn = DriverManager.getConnection(url, user, password);
+            //Connection conn = DriverManager.getConnection("jdbc:postgresql://rogue.db.elephantsql.com:5432/alirdwit", "alirdwit", "xR9tAtXzVj6DON-LTQiQbZaCL2aWVLSG");
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT SUM(gyermek_szam) FROM AzFoglalasok WHERE gyermek_szam IS NOT NULL");
+            rs.next();
+            int count = rs.getInt(1);
+            System.out.println("Szabad Gyerek Mellények száma: " + count );
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Sikertelen kapcsolat az adatbázissal!");
+            e.printStackTrace();
+        }
     }
 }
