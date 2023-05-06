@@ -38,5 +38,32 @@ public class HelloApplication extends Application {
             System.out.println("Sikertelen kapcsolat az adatbázissal!");
             e.printStackTrace();
         }
+        //
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("WITH felszereles_osszesites AS (\n" +
+                    "    SELECT\n" +
+                    "        SUM(CASE WHEN nev = 'csonak' THEN darab ELSE 0 END) AS felszereles_csonak\n" +
+                    "    FROM felszereles\n" +
+                    "),\n" +
+                    "foglalasok_osszesites AS (\n" +
+                    "    SELECT\n" +
+                    "        SUM(csonak) AS foglalasok_csonak\n" +
+                    "    FROM foglalasok\n" +
+                    ")\n" +
+                    "SELECT\n" +
+                    "    felszereles_csonak - foglalasok_csonak AS elerheto_csonak\n" +
+                    "FROM felszereles_osszesites, foglalasok_osszesites\n");
+
+            if (rs.next()) {
+                System.out.println("vmi: " + rs.next());
+            } else {
+                System.out.println("hiba: " + rs.next() );
+            }
+        } catch (SQLException e) {
+            System.out.println("Hiba történt az adatbázis kapcsolat során!");
+            e.printStackTrace();
+        }
+
     }
 }

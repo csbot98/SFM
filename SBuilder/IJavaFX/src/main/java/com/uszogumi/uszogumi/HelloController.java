@@ -190,6 +190,7 @@ public class HelloController {
     @FXML
     public void initialize() {
         handleCsekkolasGomb(null);
+
     }
 
     //Szabad felszerelések kezdete
@@ -352,41 +353,40 @@ public class HelloController {
         updateSzabadFelnottGumi();
 
         //Itt mondom meg, hogy ha 0 elérhető felszerelés van, akkor legyen disabled a felhasználó számára a foglalás bizonyos része.
-        String szabadFelnottGumiText = szabadFelnottGumi.getText();
-        if (Integer.parseInt(String.valueOf(szabadFelnottGumiText)) == 0) {
+        String szabadFelnottGumiText = szabadFelnottGumi.getText().trim();
+        if (Integer.parseInt(szabadFelnottGumiText) <= 0) {
             azFelnottGumi.setDisable(true);
         } else {
             azFelnottGumi.setDisable(false);
         }
 
-        String szabadFelnottMellenyText = szabadFelnottMellenyek.getText();
-        if (Integer.parseInt(String.valueOf(szabadFelnottMellenyText)) == 0) {
+        String szabadFelnottMellenyText = szabadFelnottMellenyek.getText().trim();
+        if (Integer.parseInt(szabadFelnottMellenyText) <= 0) {
             azFelnottMelleny.setDisable(true);
         } else {
             azFelnottMelleny.setDisable(false);
         }
 
-        String szabadGyerekGumiText = szabadGyerekGumi.getText();
-        if (Integer.parseInt(String.valueOf(szabadGyerekGumiText)) == 0) {
+        String szabadGyerekGumiText = szabadGyerekGumi.getText().trim();
+        if (Integer.parseInt(szabadGyerekGumiText) <= 0) {
             azGyerekGumi.setDisable(true);
         } else {
             azGyerekGumi.setDisable(false);
         }
 
-        String szabadGyerekMellenyText = szabadGyerekMellenyek.getText();
-        if (Integer.parseInt(String.valueOf(szabadGyerekMellenyText)) == 0) {
+        String szabadGyerekMellenyText = szabadGyerekMellenyek.getText().trim();
+        if (Integer.parseInt(szabadGyerekMellenyText) <= 0) {
             azGyerekMelleny.setDisable(true);
         } else {
             azGyerekMelleny.setDisable(false);
         }
 
         String csonakText = szabadCsonak.getText();
-        if (Integer.parseInt(String.valueOf(csonakText)) == 0) {
+        if (Integer.parseInt(String.valueOf(csonakText)) <= 0) {
             csonakCheckBox.setDisable(true);
         } else {
             csonakCheckBox.setDisable(false);
         }
-
     }
         //Szabad felszerelések vége
 
@@ -404,99 +404,239 @@ public class HelloController {
             return;
         }
 
-        int AzFelnottGumi;
-        int AzFelnottMelleny;
-        try {
-            AzFelnottGumi = Integer.parseInt(azFelnottGumi.getText());
-            AzFelnottMelleny = Integer.parseInt(azFelnottMelleny.getText());
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Hiba");
-            alert.setHeaderText(null);
-            alert.setContentText("Kérem a darabszámot írja be a (felnőtt) felszerelés mezőkbe!");
-            alert.showAndWait();
-            return;
+        int AzFelnottGumi = 0;
+        int AzFelnottMelleny = 0;
+
+        if (!azFelnottMelleny.isDisabled()) {
+            try {
+                AzFelnottMelleny = Integer.parseInt(azFelnottMelleny.getText());
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("Kérem a darabszámot írja be a (felnőtt-mellény) felszerelés mezőkbe!");
+                alert.showAndWait();
+                return;
+            }
+        }
+
+        if (!azFelnottGumi.isDisabled()) {
+            try {
+                AzFelnottGumi = Integer.parseInt(azFelnottGumi.getText());
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("Kérem a darabszámot írja be a (felnőtt-gumi) felszerelés mezőkbe!");
+                alert.showAndWait();
+                return;
+            }
         }
 
         boolean AzGyerekFelCheckBox = azGyerekFelCheckBox.isSelected();
 
         int AzGyerekGumi = 0;
         int AzGyerekMelleny = 0;
-        if (AzGyerekFelCheckBox) {
+
+        //Ezt ha visszarakom, akkor kötelező számot írni, minden gyerek mezőbe  || ezt így hagyom a felnőtt meg marad olyan, hogy lássák mind a két módon.
+        // if (AzGyerekFelCheckBox && !azGyerekMelleny.isDisabled()) {
+        //   try {
+        //        AzGyerekMelleny = Integer.parseInt(azGyerekMelleny.getText());
+        //   } catch (NumberFormatException e) {
+        //      Alert alert = new Alert(Alert.AlertType.ERROR);
+        //      alert.setTitle("Hiba");
+        //      alert.setHeaderText(null);
+        //       alert.setContentText("Kérem a darabszámot írja be a (gyerek-mellény) felszerelés mezőkbe!");
+        //      alert.showAndWait();
+        //      return;
+        //  }
+        //}
+
+        //Ezt ha visszarakom, akkor kötelező számot írni, minden gyerek mezőbe  || ezt így hagyom a felnőtt meg marad olyan, hogy lássák mind a két módon.
+        //if (AzGyerekFelCheckBox && !azGyerekGumi.isDisabled()) {
+        //  try {
+        //      AzGyerekGumi = Integer.parseInt(azGyerekGumi.getText());
+        //  } catch (NumberFormatException e) {
+        //      Alert alert = new Alert(Alert.AlertType.ERROR);
+        //      alert.setTitle("Hiba");
+        //      alert.setHeaderText(null);
+        //      alert.setContentText("Kérem a darabszámot írja be a (gyerek-gumi) felszerelés mezőkbe!");
+        //    alert.showAndWait();
+        //      return;
+        //  }
+        //}
+
+        if (AzGyerekFelCheckBox && !azGyerekGumi.isDisabled() || !azGyerekMelleny.isDisabled()) {
+            String azGyerekGumiText = azGyerekGumi.getText().trim();
+            String azGyerekMellenyText = azGyerekMelleny.getText().trim();
+
+            if (AzGyerekFelCheckBox && azGyerekGumiText.isEmpty() && azGyerekMellenyText.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("Nem hagyhatja üresen mindekét gyerekmezőt, ha már bepipálta!");
+                alert.showAndWait();
+                return;
+            }
+            if (AzGyerekFelCheckBox && !azGyerekGumiText.isEmpty() && azGyerekMellenyText.isEmpty()) {
+                AzGyerekGumi = Integer.parseInt(azGyerekGumiText);
+            }
+            if (AzGyerekFelCheckBox && azGyerekGumiText.isEmpty() && !azGyerekMellenyText.isEmpty()) {
+                AzGyerekMelleny = Integer.parseInt(azGyerekMellenyText);
+            } else {
+                AzGyerekGumi = 0;
+                AzGyerekMelleny = 0;
+            }
+
+        }
+
+        //Ha minden üres és be van pipálva a gyerek mező, akkor error       //ez nem tudom hogy mükdöik vagy sem
+        if (AzGyerekFelCheckBox && !azGyerekGumi.isDisabled() && !azGyerekMelleny.isDisabled() && azFelnottMelleny.isDisabled() && azFelnottGumi.isDisabled()) {
             try {
                 AzGyerekGumi = Integer.parseInt(azGyerekGumi.getText());
-                AzGyerekMelleny = Integer.parseInt(azGyerekMelleny.getText());
+                AzGyerekMelleny=Integer.parseInt(azGyerekMelleny.getText());
+                AzFelnottGumi = Integer.parseInt(azFelnottGumi.getText());
+                AzFelnottMelleny = Integer.parseInt(azFelnottMelleny.getText());
             } catch (NumberFormatException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Hiba");
                 alert.setHeaderText(null);
-                alert.setContentText("Kérem a darabszámot írja be a (gyerek) felszerelés mezőkbe!");
+                alert.setContentText("Full üres adatot, nem küldhet be!");
                 alert.showAndWait();
                 return;
             }
         }
+        //teszt: itt nem kötelező számot megadni, cserébe automatikusan 0, lesz a foglalandó felszerelés.
+        if (AzGyerekFelCheckBox && !azGyerekMelleny.isDisabled()) {
+            try {
+                AzGyerekMelleny = Integer.parseInt(azGyerekMelleny.getText());
+            } catch (NumberFormatException e) {
+                AzGyerekMelleny = 0;
+            }
+        }
+        //teszt itt is ez a párja.
+        if (AzGyerekFelCheckBox && !azGyerekGumi.isDisabled()) {
+            try {
+                AzGyerekGumi = Integer.parseInt(azGyerekGumi.getText());
+            } catch (NumberFormatException e) {
+                AzGyerekGumi = 0;
+            }
+        }
+
+        ///////////teszt vége ::Ha kiszedném majd valaha..
+
+
+        //boolean AzCsonak = csonakCheckBox.isSelected();
 
         boolean AzCsonak = csonakCheckBox.isSelected();
+
         String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String tableName = "foglalasok";
 
+
+
         //Még ide valahová kell egy ellenőrzés vagy vmi hogy -minusz foglalás ne történjen meg!
         try {
-            Connection conn = DriverManager.getConnection(url, user, password);
-            conn.setAutoCommit(false); // transaction kezdése
-            String sql = "INSERT INTO " + tableName + " (nev, datum, felnott_melleny, felnott_gumi, gyerek_melleny, gyerek_gumi, csonak) VALUES (?, NOW(), ?, ?";
-            if (AzGyerekFelCheckBox) {
-                sql += ", ?, ?";
-            }
-            else {
-                sql += ", 0, 0";
-            }
-            sql += ", ?)";
+        Connection conn = DriverManager.getConnection(url, user, password);
+        conn.setAutoCommit(false); // transaction kezdése
+        //Teszt0.1
+        String sql1 = "WITH felszereles_osszesites AS (\n" +
+                "    SELECT\n" +
+                "        SUM(CASE WHEN nev = 'felnott_melleny' THEN darab ELSE 0 END) AS felszereles_felnott_melleny,\n" +
+                "        SUM(CASE WHEN nev = 'felnott_gumi' THEN darab ELSE 0 END) AS felszereles_felnott_gumi,\n" +
+                "        SUM(CASE WHEN nev = 'gyerek_melleny' THEN darab ELSE 0 END) AS felszereles_gyerek_melleny,\n" +
+                "        SUM(CASE WHEN nev = 'gyerek_gumi' THEN darab ELSE 0 END) AS felszereles_gyerek_gumi,\n" +
+                "        SUM(CASE WHEN nev = 'csonak' THEN darab ELSE 0 END) AS felszereles_csonak\n" +
+                "    FROM felszereles\n" +
+                "),\n" +
+                "foglalasok_osszesites AS (\n" +
+                "    SELECT\n" +
+                "        SUM(felnott_melleny) AS foglalasok_felnott_melleny,\n" +
+                "        SUM(felnott_gumi) AS foglalasok_felnott_gumi,\n" +
+                "        SUM(gyerek_melleny) AS foglalasok_gyerek_melleny,\n" +
+                "        SUM(gyerek_gumi) AS foglalasok_gyerek_gumi,\n" +
+                "        SUM(csonak) AS foglalasok_csonak\n" +
+                "    FROM foglalasok\n" +
+                ")\n" +
+                "SELECT\n" +
+                "    felszereles_felnott_melleny - foglalasok_felnott_melleny AS elerheto_felnott_melleny,\n" +
+                "    felszereles_felnott_gumi - foglalasok_felnott_gumi AS elerheto_felnott_gumi,\n" +
+                "    felszereles_gyerek_melleny - foglalasok_gyerek_melleny AS elerheto_gyerek_melleny,\n" +
+                "    felszereles_gyerek_gumi - foglalasok_gyerek_gumi AS elerheto_gyerek_gumi,\n" +
+                "    felszereles_csonak - foglalasok_csonak AS elerheto_csonak\n" +
+                "FROM felszereles_osszesites, foglalasok_osszesites;";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql1);
+
+        if (rs.next()) {
+        int elerhetoFelnottMelleny = rs.getInt("elerheto_felnott_melleny");
+        int elerhetoFelnottGumi = rs.getInt("elerheto_felnott_gumi");
+        int elerhetoGyerekMelleny = rs.getInt("elerheto_gyerek_melleny");
+        int elerhetoGyerekGumi = rs.getInt("elerheto_gyerek_gumi");
+        int elerhetoCsonak = rs.getInt("elerheto_csonak");
+
+        //Összehasonlítás
+
+            if (!(AzFelnottMelleny > elerhetoFelnottMelleny ||
+                    AzFelnottGumi > elerhetoFelnottGumi ||
+                    AzGyerekMelleny > elerhetoGyerekMelleny ||
+                    AzGyerekGumi > elerhetoGyerekGumi ||
+                    (csonakCheckBox.isDisable() && !AzCsonak) ||
+                    (!szabadCsonak.isDisable() && !AzCsonak && elerhetoCsonak == 0))) {
+            // Ha minden rendben van, akkor a foglalás rögzítése az adatbázisban
+            //Teszt0.1 vége
+            String sql = "INSERT INTO " + tableName + " (nev, datum, felnott_melleny, felnott_gumi, gyerek_melleny, gyerek_gumi, csonak) VALUES (?, NOW(), ?, ?, ?, ?, ?)";
+
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, AzFoglaloNev);
-            pstmt.setInt(2, AzFelnottMelleny);
-            pstmt.setInt(3, AzFelnottGumi);
-            int index = 4;
-            if (AzGyerekFelCheckBox) {
-                pstmt.setInt(index++, AzGyerekMelleny);
-                pstmt.setInt(index++, AzGyerekGumi);
+            if (azFelnottMelleny.isDisable()) {
+                pstmt.setInt(2, 0);
+            } else {
+                pstmt.setInt(2, AzFelnottMelleny);
             }
-            pstmt.setBoolean(index++, AzCsonak);
-            pstmt.executeUpdate();
+            if (azFelnottGumi.isDisable()) {
+                pstmt.setInt(3, 0);
+            } else {
+                pstmt.setInt(3, AzFelnottGumi);
+            }
+            if (azGyerekMelleny.isDisable()) {
+                pstmt.setInt(4, 0);
+            } else {
+                pstmt.setInt(4, AzGyerekMelleny);
+            }
+            if (azGyerekGumi.isDisable()) {
+                pstmt.setInt(5, 0);
+            } else {
+                pstmt.setInt(5, AzGyerekGumi);
+            }
+            if (csonakCheckBox.isDisable() && !csonakCheckBox.isSelected()) {
+                pstmt.setBoolean(6, false);
+            } else {
+                pstmt.setBoolean(6, AzCsonak);
+            }
 
+            pstmt.executeUpdate();
             conn.commit(); // transaction végrehajtása
             conn.setAutoCommit(true);
-
-            //conn.setAutoCommit(false); // transaction kezdése
-            // felszerelések számának csökkentése a felszerelések táblában
-            //String updateSql = "UPDATE felszereles SET darab = darab - ? WHERE nev = ?";
-            //PreparedStatement pstmtUpdate = conn.prepareStatement(updateSql);
-            //pstmtUpdate.setInt(1, AzFelnottMelleny);
-            //pstmtUpdate.setString(2, "felnott_melleny");
-            //pstmtUpdate.executeUpdate();
-            //pstmtUpdate.setInt(1, AzFelnottGumi);
-            //pstmtUpdate.setString(2, "felnott_gumi");
-            //pstmtUpdate.executeUpdate();
-            //if (AzGyerekFelCheckBox) {
-            //    pstmtUpdate.setInt(1, AzGyerekMelleny);
-            //    pstmtUpdate.setString(2, "gyerek_melleny");
-            //    pstmtUpdate.executeUpdate();
-            //    pstmtUpdate.setInt(1, AzGyerekGumi);
-            //    pstmtUpdate.setString(2, "gyerek_gumi");
-            //     pstmtUpdate.executeUpdate();
-            //}
-            //pstmtUpdate.setBoolean(1, AzCsonak);
-            //pstmtUpdate.setString(2, "csonak");
-            //pstmtUpdate.executeUpdate();
-
-            //conn.commit(); // transaction végrehajtása
-            //conn.setAutoCommit(true);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sikeres foglalás");
             alert.setHeaderText(null);
             alert.setContentText("A foglalás sikeresen rögzítve az adatbázisba!");
             alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            //alert.setContentText(String.valueOf(AzCsonak));
+            alert.setContentText("Hiba történt az adatok mentése során- nincs annyi cucc!");
+            alert.showAndWait();
+        }
+        } else {Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("Hiba történt az adatok mentése során- dasz tudjac!");
+            alert.showAndWait();}
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Hiba");
