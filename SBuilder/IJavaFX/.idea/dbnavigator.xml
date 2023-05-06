@@ -26,6 +26,7 @@
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="7b282c62-e646-4564-981a-75efa9295453" dataset="test.laterfoglalasok" active-filter-id="" />
     <filter-actions connection-id="7b282c62-e646-4564-981a-75efa9295453" dataset="test.foglalasok" active-filter-id="" />
     <filter-actions connection-id="5102add5-e657-4e3a-9174-6661254a203f" dataset="public.azfoglalasok" active-filter-id="" />
   </component>

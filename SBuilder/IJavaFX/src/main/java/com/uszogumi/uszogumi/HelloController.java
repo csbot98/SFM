@@ -1,5 +1,5 @@
 package com.uszogumi.uszogumi;
-
+//8 git push: képes azonnali foglalásra és foglalás törlésre, viszont hiányzik a törlésnél annyi, hogy a lefoglalt felszereléseket "feloldja". ||
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -530,10 +530,10 @@ public class HelloController {
 
         boolean AzCsonak = csonakCheckBox.isSelected();
 
-        String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        //Tökmindegy ugyse tudja megenni a dátum formázást.
+        //String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy. MM. dd"));
+
         String tableName = "foglalasok";
-
-
 
         //Még ide valahová kell egy ellenőrzés vagy vmi hogy -minusz foglalás ne történjen meg!
         try {
@@ -596,7 +596,7 @@ public class HelloController {
                     (!szabadCsonak.isDisable() && !AzCsonak && elerhetoCsonak == 0))) {
             // Ha minden rendben van, akkor a foglalás rögzítése az adatbázisban
 
-            String sql = "INSERT INTO " + tableName + " (nev, datum, felnott_melleny, felnott_gumi, gyerek_melleny, gyerek_gumi, csonak) VALUES (?, NOW(), ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO " + tableName + " (nev, datum, felnott_melleny, felnott_gumi, gyerek_melleny, gyerek_gumi, csonak, aktiv) VALUES (?, NOW(), ?, ?, ?, ?, ?, 1)";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, AzFoglaloNev);
@@ -665,7 +665,49 @@ public class HelloController {
 
     @FXML
     void handleFoglalasDelGomb(ActionEvent event) {
+        String FoglaloDelNev = foglaloDelNeve.getText();
+        String datum = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy. MM. dd"));
 
+        if (FoglaloDelNev.matches(".*\\d+.*") || FoglaloDelNev.split("\\s").length == 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("A név mező csak betűket fogad el!");
+            alert.showAndWait();
+            return;
+        }
+        String sql = "UPDATE foglalasok SET aktiv = 0 WHERE nev = ? AND datum = ? AND aktiv = 1";
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, FoglaloDelNev);
+            stmt.setDate(2, java.sql.Date.valueOf(datum));
+            int result = stmt.executeUpdate();
+            if (result > 0) {
+                //System.out.println("A foglalás törlése sikeresen megtörtént.");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sikeres törlés!");
+                alert.setHeaderText(null);
+                alert.setContentText("A foglalás törlése sikeresen megtörtént.");
+                alert.showAndWait();
+                return;
+            } else {
+                //System.out.println("Nem található aktív foglalás a megadott névvel és dátummal.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("Nem található aktív foglalás a megadott névvel és dátummal.");
+                alert.showAndWait();
+                return;
+            }
+        } catch (SQLException e) {
+            //System.out.println("Hiba történt az adatbázis kapcsolat során!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("Hiba történt az adatbázis kapcsolat során!");
+            alert.showAndWait();
+            return;
+        }
     }
 
     @FXML
