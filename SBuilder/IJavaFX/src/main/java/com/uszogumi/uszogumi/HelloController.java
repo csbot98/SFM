@@ -1,5 +1,5 @@
 package com.uszogumi.uszogumi;
-//8 git push: képes azonnali foglalásra és foglalás törlésre, viszont hiányzik a törlésnél annyi, hogy a lefoglalt felszereléseket "feloldja". ||
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
