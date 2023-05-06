@@ -27,8 +27,8 @@ public class HelloApplication extends Application {
         try {
 
             Connection conn = DriverManager.getConnection(url, user, password);
-            //Connection conn = DriverManager.getConnection("jdbc:postgresql://rogue.db.elephantsql.com:5432/alirdwit", "alirdwit", "xR9tAtXzVj6DON-LTQiQbZaCL2aWVLSG");
             Statement stmt = conn.createStatement();
+            //System.out.println("Siker kapcsolat az adatbázissal!");
             ResultSet rs = stmt.executeQuery("SELECT SUM(gyermek_szam) FROM AzFoglalasok WHERE gyermek_szam IS NOT NULL");
             rs.next();
             int count = rs.getInt(1);
