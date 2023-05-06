@@ -576,15 +576,26 @@ public class HelloController {
         int elerhetoCsonak = rs.getInt("elerheto_csonak");
 
         //Összehasonlítás
-
-            if (!(AzFelnottMelleny > elerhetoFelnottMelleny ||
+            //Ha minden adat 0, akkor azt ne töltse fel a db-be
+            if (AzFelnottMelleny == 0 &&
+                    AzFelnottGumi == 0 &&
+                    AzGyerekMelleny == 0 &&
+                    AzGyerekGumi == 0 &&
+                    (!csonakCheckBox.isSelected() && !AzCsonak) ){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Üres tábla");
+                alert.setHeaderText(null);
+                alert.setContentText("Semmilyen foglalási adatot nem adott meg!");
+                alert.showAndWait();
+            }
+            else if (!(AzFelnottMelleny > elerhetoFelnottMelleny ||
                     AzFelnottGumi > elerhetoFelnottGumi ||
                     AzGyerekMelleny > elerhetoGyerekMelleny ||
                     AzGyerekGumi > elerhetoGyerekGumi ||
                     (csonakCheckBox.isDisable() && !AzCsonak) ||
                     (!szabadCsonak.isDisable() && !AzCsonak && elerhetoCsonak == 0))) {
             // Ha minden rendben van, akkor a foglalás rögzítése az adatbázisban
-            //Teszt0.1 vége
+
             String sql = "INSERT INTO " + tableName + " (nev, datum, felnott_melleny, felnott_gumi, gyerek_melleny, gyerek_gumi, csonak) VALUES (?, NOW(), ?, ?, ?, ?, ?)";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
