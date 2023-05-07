@@ -28,16 +28,6 @@
                             <children>
                                 <VBox layoutX="40.0" layoutY="67.0" prefHeight="93.0" prefWidth="203.0">
                                     <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (gyerek) mellények száma:" wrappingWidth="202.13671875">
-                                            <VBox.margin>
-                                                <Insets />
-                                            </VBox.margin>
-                                        </Text>
-                                        <Text fx:id="szabadGyerekMellenyek" layoutX="20.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="202.13671875">
-                                            <VBox.margin>
-                                                <Insets bottom="5.0" left="20.0" top="5.0" />
-                                            </VBox.margin>
-                                        </Text>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (felnőtt) mellények száma:" wrappingWidth="202.13671875">
                                             <VBox.margin>
                                                 <Insets />
@@ -48,12 +38,22 @@
                                                 <Insets bottom="5.0" left="20.0" top="5.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad csónak száma:" wrappingWidth="202.13671875">
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (felnőtt) úszógumi száma:" wrappingWidth="202.13671875">
                                             <VBox.margin>
                                                 <Insets />
                                             </VBox.margin>
                                         </Text>
-                                        <Text fx:id="szabadCsonak" layoutX="10.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3" wrappingWidth="202.13671875">
+                                        <Text fx:id="szabadFelnottGumi" layoutX="10.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" left="20.0" top="5.0" />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (gyerek) mellények száma:" wrappingWidth="202.13671875">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text fx:id="szabadGyerekMellenyek" layoutX="20.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="202.13671875">
                                             <VBox.margin>
                                                 <Insets bottom="5.0" left="20.0" top="5.0" />
                                             </VBox.margin>
@@ -68,12 +68,12 @@
                                                 <Insets bottom="5.0" left="20.0" top="5.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad (felnőtt) úszógumi száma:" wrappingWidth="202.13671875">
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Szabad csónak száma:" wrappingWidth="202.13671875">
                                             <VBox.margin>
                                                 <Insets />
                                             </VBox.margin>
                                         </Text>
-                                        <Text fx:id="szabadFelnottGumi" layoutX="10.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5" wrappingWidth="202.13671875">
+                                        <Text fx:id="szabadCsonak" layoutX="10.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3" wrappingWidth="202.13671875">
                                             <VBox.margin>
                                                 <Insets bottom="5.0" left="20.0" top="5.0" />
                                             </VBox.margin>

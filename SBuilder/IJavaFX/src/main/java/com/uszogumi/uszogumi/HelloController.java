@@ -198,19 +198,25 @@ public class HelloController {
             try (Connection conn = DriverManager.getConnection(url, user, password)) {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery("WITH felszereles_osszesites AS (\n" +
-                        " SELECT\n" +
-                        " SUM(CASE WHEN nev = 'gyerek_melleny' THEN darab ELSE 0 END) AS felszereles_gyerek_melleny\n" +
-                        " FROM felszereles\n" +
-                        "),\n" +
+                        "\t\tSELECT \n" +
+                        "\t\tSUM(CASE WHEN nev = 'gyerek_melleny' THEN darab ELSE 0 END) AS felszereles_gyerek_melleny\n" +
+                        "\t\tFROM felszereles),\n" +
                         "foglalasok_osszesites AS (\n" +
-                        " SELECT\n" +
-                        " SUM(gyerek_melleny) AS foglalasok_gyerek_melleny\n" +
-                        " FROM foglalasok\n" +
-                        " WHERE aktiv = TRUE\n" +
+                        "\t\tSELECT\n" +
+                        "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND gyerek_melleny > 0 THEN gyerek_melleny ELSE 0 END) AS foglalasok_gyerek_melleny\n" +
+                        "\t\tFROM foglalasok),\n" +
+                        "jovobeni_foglalasok_osszesites AS (\n" +
+                        "\t\tSELECT\n" +
+                        "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=CURRENT_DATE AND gyerek_melleny > 0 THEN gyerek_melleny ELSE 0 END) AS jovobeni_foglalasok_gyerek_melleny\n" +
+                        "\t\tFROM jovobeni_foglalasok\n" +
                         ")\n" +
                         "SELECT\n" +
-                        " felszereles_gyerek_melleny - foglalasok_gyerek_melleny AS elerheto_gyerek_melleny\n" +
-                        "FROM felszereles_osszesites, foglalasok_osszesites\n");
+                        "\t-- gyerek_melleny:\n" +
+                        "\t--\tfelszereles_osszesites.felszereles_gyerek_melleny,\n" +
+                        "\t--\tfoglalasok_osszesites.foglalasok_gyerek_melleny,\n" +
+                        "\t--\tjovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_melleny,\n" +
+                        "\t\tfelszereles_osszesites.felszereles_gyerek_melleny - foglalasok_osszesites.foglalasok_gyerek_melleny - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_melleny AS elerheto_gyerek_melleny\n" +
+                        "FROM felszereles_osszesites, foglalasok_osszesites, jovobeni_foglalasok_osszesites;");
 
                 if (rs.next()) {
                     int count = rs.getInt(1);
@@ -229,19 +235,25 @@ public class HelloController {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("WITH felszereles_osszesites AS (\n" +
-                    " SELECT\n" +
-                    " SUM(CASE WHEN nev = 'felnott_melleny' THEN darab ELSE 0 END) AS felszereles_felnott_melleny\n" +
-                    " FROM felszereles\n" +
-                    "),\n" +
+                    "\t\tSELECT \n" +
+                    "\t\tSUM(CASE WHEN nev = 'felnott_melleny' THEN darab ELSE 0 END) AS felszereles_felnott_melleny\n" +
+                    "\t\tFROM felszereles),\n" +
                     "foglalasok_osszesites AS (\n" +
-                    " SELECT\n" +
-                    " SUM(felnott_melleny) AS foglalasok_felnott_melleny\n" +
-                    " FROM foglalasok\n" +
-                    " WHERE aktiv = TRUE\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND felnott_melleny > 0 THEN felnott_melleny ELSE 0 END) AS foglalasok_felnott_melleny\n" +
+                    "\t\tFROM foglalasok),\n" +
+                    "jovobeni_foglalasok_osszesites AS (\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=CURRENT_DATE AND felnott_melleny > 0 THEN felnott_melleny ELSE 0 END) AS jovobeni_foglalasok_felnott_melleny\n" +
+                    "\t\tFROM jovobeni_foglalasok\n" +
                     ")\n" +
                     "SELECT\n" +
-                    " felszereles_felnott_melleny - foglalasok_felnott_melleny AS elerheto_felnott_melleny\n" +
-                    "FROM felszereles_osszesites, foglalasok_osszesites\n");
+                    "\t-- felnott_melleny:\n" +
+                    "\t--\tfelszereles_osszesites.felszereles_felnott_melleny,\n" +
+                    "\t--\tfoglalasok_osszesites.foglalasok_felnott_melleny,\n" +
+                    "\t--\tjovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_melleny,\n" +
+                    "\t\tfelszereles_osszesites.felszereles_felnott_melleny - foglalasok_osszesites.foglalasok_felnott_melleny - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_melleny AS elerheto_felnott_melleny\n" +
+                    "FROM felszereles_osszesites, foglalasok_osszesites, jovobeni_foglalasok_osszesites;");
 
             if (rs.next()) {
                 int count = rs.getInt(1);
@@ -291,19 +303,25 @@ public class HelloController {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("WITH felszereles_osszesites AS (\n" +
-                    " SELECT\n" +
-                    " SUM(CASE WHEN nev = 'gyerek_gumi' THEN darab ELSE 0 END) AS felszereles_gyerek_gumi\n" +
-                    " FROM felszereles\n" +
-                    "),\n" +
+                    "\t\tSELECT \n" +
+                    "\t\tSUM(CASE WHEN nev = 'gyerek_gumi' THEN darab ELSE 0 END) AS felszereles_gyerek_gumi\n" +
+                    "\t\tFROM felszereles),\n" +
                     "foglalasok_osszesites AS (\n" +
-                    " SELECT\n" +
-                    " SUM(gyerek_gumi) AS foglalasok_gyerek_gumi\n" +
-                    " FROM foglalasok\n" +
-                    " WHERE aktiv = TRUE\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND gyerek_gumi > 0 THEN gyerek_gumi ELSE 0 END) AS foglalasok_gyerek_gumi\n" +
+                    "\t\tFROM foglalasok),\n" +
+                    "jovobeni_foglalasok_osszesites AS (\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=CURRENT_DATE AND gyerek_gumi > 0 THEN gyerek_gumi ELSE 0 END) AS jovobeni_foglalasok_gyerek_gumi\n" +
+                    "\t\tFROM jovobeni_foglalasok\n" +
                     ")\n" +
                     "SELECT\n" +
-                    " felszereles_gyerek_gumi - foglalasok_gyerek_gumi AS elerheto_gyerek_gumi\n" +
-                    "FROM felszereles_osszesites, foglalasok_osszesites\n");
+                    "\t-- gyerek_gumi:\n" +
+                    "\t--\tfelszereles_osszesites.felszereles_gyerek_gumi,\n" +
+                    "\t--\tfoglalasok_osszesites.foglalasok_gyerek_gumi,\n" +
+                    "\t--\tjovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_gumi,\n" +
+                    "\t\tfelszereles_osszesites.felszereles_gyerek_gumi - foglalasok_osszesites.foglalasok_gyerek_gumi - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_gumi AS elerheto_gyerek_gumi\n" +
+                    "FROM felszereles_osszesites, foglalasok_osszesites, jovobeni_foglalasok_osszesites;\n");
 
             if (rs.next()) {
                 int count = rs.getInt(1);
@@ -322,19 +340,25 @@ public class HelloController {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("WITH felszereles_osszesites AS (\n" +
-                    " SELECT\n" +
-                    " SUM(CASE WHEN nev = 'felnott_gumi' THEN darab ELSE 0 END) AS felszereles_felnott_gumi\n" +
-                    " FROM felszereles\n" +
-                    "),\n" +
+                    "\t\tSELECT \n" +
+                    "\t\tSUM(CASE WHEN nev = 'felnott_gumi' THEN darab ELSE 0 END) AS felszereles_felnott_gumi\n" +
+                    "\t\tFROM felszereles),\n" +
                     "foglalasok_osszesites AS (\n" +
-                    " SELECT\n" +
-                    " SUM(felnott_gumi) AS foglalasok_felnott_gumi\n" +
-                    " FROM foglalasok\n" +
-                    " WHERE aktiv = TRUE\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND felnott_gumi > 0 THEN felnott_gumi ELSE 0 END) AS foglalasok_felnott_gumi\n" +
+                    "\t\tFROM foglalasok),\n" +
+                    "jovobeni_foglalasok_osszesites AS (\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=CURRENT_DATE AND felnott_gumi > 0 THEN felnott_gumi ELSE 0 END) AS jovobeni_foglalasok_felnott_gumi\n" +
+                    "\t\tFROM jovobeni_foglalasok\n" +
                     ")\n" +
                     "SELECT\n" +
-                    " felszereles_felnott_gumi - foglalasok_felnott_gumi AS elerheto_felnott_gumi\n" +
-                    "FROM felszereles_osszesites, foglalasok_osszesites\n");
+                    "\t-- felnott_gumi:\n" +
+                    "\t--\tfelszereles_osszesites.felszereles_felnott_gumi,\n" +
+                    "\t--\tfoglalasok_osszesites.foglalasok_felnott_gumi,\n" +
+                    "\t--\tjovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_gumi,\n" +
+                    "\t\tfelszereles_osszesites.felszereles_felnott_gumi - foglalasok_osszesites.foglalasok_felnott_gumi - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_gumi AS elerheto_felnott_gumi\n" +
+                    "FROM felszereles_osszesites, foglalasok_osszesites, jovobeni_foglalasok_osszesites;");
 
             if (rs.next()) {
                 int count = rs.getInt(1);
@@ -546,30 +570,61 @@ public class HelloController {
         conn.setAutoCommit(false); // transaction kezdése
         //Teszt0.1
             String sql1 = "WITH felszereles_osszesites AS (\n" +
-                    " SELECT\n" +
-                    " SUM(CASE WHEN nev = 'felnott_melleny' THEN darab ELSE 0 END) AS felszereles_felnott_melleny,\n" +
-                    " SUM(CASE WHEN nev = 'felnott_gumi' THEN darab ELSE 0 END) AS felszereles_felnott_gumi,\n" +
-                    " SUM(CASE WHEN nev = 'gyerek_melleny' THEN darab ELSE 0 END) AS felszereles_gyerek_melleny,\n" +
-                    " SUM(CASE WHEN nev = 'gyerek_gumi' THEN darab ELSE 0 END) AS felszereles_gyerek_gumi,\n" +
-                    " SUM(CASE WHEN nev = 'csonak' THEN darab ELSE 0 END) AS felszereles_csonak\n" +
-                    " FROM felszereles\n" +
-                    "),\n" +
+                    "\t\tSELECT \n" +
+                    "\t\tSUM(CASE WHEN nev = 'felnott_melleny' THEN darab ELSE 0 END) AS felszereles_felnott_melleny,\n" +
+                    "\t\tSUM(CASE WHEN nev = 'felnott_gumi' THEN darab ELSE 0 END) AS felszereles_felnott_gumi,\n" +
+                    "\t\tSUM(CASE WHEN nev = 'gyerek_melleny' THEN darab ELSE 0 END) AS felszereles_gyerek_melleny,\n" +
+                    "\t\tSUM(CASE WHEN nev = 'gyerek_gumi' THEN darab ELSE 0 END) AS felszereles_gyerek_gumi,\n" +
+                    "\t\tSUM(CASE WHEN nev = 'csonak' THEN darab ELSE 0 END) AS felszereles_csonak\n" +
+                    "\t\tFROM felszereles),\n" +
                     "foglalasok_osszesites AS (\n" +
-                    " SELECT\n" +
-                    " SUM(CASE WHEN aktiv = TRUE AND felnott_melleny > 0 THEN felnott_melleny ELSE 0 END) AS foglalasok_felnott_melleny,\n" +
-                    " SUM(CASE WHEN aktiv = TRUE AND felnott_gumi > 0 THEN felnott_gumi ELSE 0 END) AS foglalasok_felnott_gumi,\n" +
-                    " SUM(CASE WHEN aktiv = TRUE AND gyerek_melleny > 0 THEN gyerek_melleny ELSE 0 END) AS foglalasok_gyerek_melleny,\n" +
-                    " SUM(CASE WHEN aktiv = TRUE AND gyerek_gumi > 0 THEN gyerek_gumi ELSE 0 END) AS foglalasok_gyerek_gumi,\n" +
-                    " SUM(CASE WHEN aktiv = TRUE AND csonak > 0 THEN csonak ELSE 0 END) AS foglalasok_csonak\n" +
-                    " FROM foglalasok\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND felnott_melleny > 0 THEN felnott_melleny ELSE 0 END) AS foglalasok_felnott_melleny,\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND felnott_gumi > 0 THEN felnott_gumi ELSE 0 END) AS foglalasok_felnott_gumi,\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND gyerek_melleny > 0 THEN gyerek_melleny ELSE 0 END) AS foglalasok_gyerek_melleny,\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND gyerek_gumi > 0 THEN gyerek_gumi ELSE 0 END) AS foglalasok_gyerek_gumi, \n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND csonak > 0 THEN csonak ELSE 0 END) AS foglalasok_csonak\n" +
+                    "\t\tFROM foglalasok),\n" +
+                    "jovobeni_foglalasok_osszesites AS (\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=CURRENT_DATE AND felnott_melleny > 0 THEN felnott_melleny ELSE 0 END) AS jovobeni_foglalasok_felnott_melleny,\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=CURRENT_DATE AND felnott_gumi > 0 THEN felnott_gumi ELSE 0 END) AS jovobeni_foglalasok_felnott_gumi,\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=CURRENT_DATE AND gyerek_melleny > 0 THEN gyerek_melleny ELSE 0 END) AS jovobeni_foglalasok_gyerek_melleny,\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=CURRENT_DATE AND gyerek_gumi > 0 THEN gyerek_gumi ELSE 0 END) AS jovobeni_foglalasok_gyerek_gumi,\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=CURRENT_DATE AND csonak > 0 THEN csonak ELSE 0 END) AS jovobeni_foglalasok_csonak\n" +
+                    "\t\tFROM jovobeni_foglalasok\n" +
                     ")\n" +
                     "SELECT\n" +
-                    " felszereles_felnott_melleny - foglalasok_felnott_melleny AS elerheto_felnott_melleny,\n" +
-                    " felszereles_felnott_gumi - foglalasok_felnott_gumi AS elerheto_felnott_gumi,\n" +
-                    " felszereles_gyerek_melleny - foglalasok_gyerek_melleny AS elerheto_gyerek_melleny,\n" +
-                    " felszereles_gyerek_gumi - foglalasok_gyerek_gumi AS elerheto_gyerek_gumi,\n" +
-                    " felszereles_csonak - foglalasok_csonak AS elerheto_csonak\n" +
-                    "FROM felszereles_osszesites, foglalasok_osszesites;";
+                    "\t-- felnott_melleny:\n" +
+                    "\t--\tfelszereles_osszesites.felszereles_felnott_melleny,\n" +
+                    "\t--\tfoglalasok_osszesites.foglalasok_felnott_melleny,\n" +
+                    "\t--\tjovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_melleny,\n" +
+                    "\t\tfelszereles_osszesites.felszereles_felnott_melleny - foglalasok_osszesites.foglalasok_felnott_melleny - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_melleny AS elerheto_felnott_melleny,\n" +
+                    "\t\t\n" +
+                    "\t-- felnott_gumi:\n" +
+                    "\t-- felszereles_osszesites.felszereles_felnott_gumi,\n" +
+                    "    -- foglalasok_osszesites.foglalasok_felnott_gumi,\n" +
+                    "    -- jovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_gumi,\n" +
+                    "\t felszereles_osszesites.felszereles_felnott_gumi - foglalasok_osszesites.foglalasok_felnott_gumi - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_gumi AS elerheto_felnott_gumi,\n" +
+                    "\t\n" +
+                    "\t-- gyerek_melleny:\n" +
+                    "\t-- felszereles_osszesites.felszereles_gyerek_melleny,\n" +
+                    "    -- foglalasok_osszesites.foglalasok_gyerek_melleny,\n" +
+                    "    -- jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_melleny,\n" +
+                    "\t felszereles_osszesites.felszereles_gyerek_melleny - foglalasok_osszesites.foglalasok_gyerek_melleny - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_melleny AS elerheto_gyerek_melleny,\n" +
+                    "\t\n" +
+                    "\t-- gyerek_gumi:\n" +
+                    "\t-- felszereles_osszesites.felszereles_gyerek_gumi,\n" +
+                    "    -- foglalasok_osszesites.foglalasok_gyerek_gumi,\n" +
+                    "    -- jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_gumi,\n" +
+                    "\t felszereles_osszesites.felszereles_gyerek_gumi - foglalasok_osszesites.foglalasok_gyerek_gumi - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_gumi AS elerheto_gyerek_gumi,\n" +
+                    "\t\n" +
+                    "\t-- csonak:\n" +
+                    "\t--\tfelszereles_osszesites.felszereles_csonak,\n" +
+                    "\t--\tfoglalasok_osszesites.foglalasok_csonak,\n" +
+                    "\t--\tjovobeni_foglalasok_osszesites.jovobeni_foglalasok_csonak,\n" +
+                    "\t\tfelszereles_osszesites.felszereles_csonak  - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_csonak  - foglalasok_osszesites.foglalasok_csonak AS elerheto_csonak\n" +
+                    "FROM felszereles_osszesites, foglalasok_osszesites, jovobeni_foglalasok_osszesites;\n";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql1);
 
@@ -717,6 +772,7 @@ public class HelloController {
 
     @FXML
     void handleFoglalasGomb(ActionEvent event) {
+        
 
     }
 
