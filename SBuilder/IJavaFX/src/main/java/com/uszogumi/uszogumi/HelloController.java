@@ -755,7 +755,11 @@ public class HelloController {
             datum = selectedDate.format(DateTimeFormatter.BASIC_ISO_DATE);
             java.sql.Date sqlDate = java.sql.Date.valueOf(selectedDate);
 
-        System.out.println(datum);
+        //beírt adatok trölése
+        foglaloDelNeve.setText("");
+        foglalasDelDatePicker.setValue(null);
+
+        //System.out.println(datum);
         if (FoglaloDelNev.matches(".*\\d+.*") || FoglaloDelNev.split("\\s").length == 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Hiba");
@@ -796,6 +800,7 @@ public class HelloController {
             alert.showAndWait();
             return;
         }
+
     }
 
     @FXML
@@ -1047,7 +1052,14 @@ public class HelloController {
             ResultSet rs = pstmt1.executeQuery();
             if (rs.next()) {
                 int elerhetoFelnottMelleny = rs.getInt("elerheto_felnott_melleny");
-                if (felnottMelleny == 0) {
+                int elerhetoFelnottGumi = rs.getInt("elerheto_felnott_gumi");
+                int elerhetoGyerekMelleny = rs.getInt("elerheto_gyerek_melleny");
+                int elerhetoGyerekGumi = rs.getInt("elerheto_gyerek_gumi");
+                int elerhetoCsonak = rs.getInt("elerheto_csonak");
+                if (felnottMelleny == 0 &&
+                        felnottGumi == 0 &&
+                        gyerekMelleny == 0 &&
+                        gyerekGumi == 0 && !foglalasGyerekCheckBox.isSelected()) { //
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Üres tábla");
                     alert.setHeaderText(null);
@@ -1125,7 +1137,340 @@ public class HelloController {
             return;
         }
         String selectedDateStr = selectedDate.format(DateTimeFormatter.BASIC_ISO_DATE);
-        System.out.println(selectedDateStr);
+
+        boolean FoglalasFelnottModCheckBox = foglalasFelnottModCheckBox.isSelected();
+        boolean FoglalasGyerekModCheckBox = foglalasGyerekModCheckBox.isSelected();
+
+        //ezeket majd törölni ha nem kell!
+        foglaloModGyGumi.isDisabled();
+        foglaloModGyMelleny.isDisabled();
+        foglalasFelModMelleny.isDisabled();
+        foglalasFelModGumi.isDisabled();
+        //
+
+        int gyerekMelleny = 0;
+        int gyerekGumi = 0;
+        int felnottMelleny=0;
+        int felnottGumi=0;
+
+        //ha minden mező üres
+        if(foglalasFelModMelleny.getText().isEmpty() && foglalasFelModGumi.getText().isEmpty() && foglaloModGyMelleny.getText().isEmpty() && foglaloModGyGumi.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("Full üres adatot nem küldhet be!");
+            alert.showAndWait();
+            return;
+        }
+
+        //felnőtt-mező
+        if (foglalasFelnottModCheckBox.isSelected()) {
+            int FoglalasFelModMelleny = 0;
+            if (!foglalasFelModMelleny.getText().isEmpty()) {
+                try {
+                    FoglalasFelModMelleny = Integer.parseInt(foglalasFelModMelleny.getText().trim());
+                    if (FoglalasFelModMelleny < 0) {
+                        // Ha az érték nem érvényes szám, akkor hibaüzenetet jelenítünk meg
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Hiba");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Kérjük, érvényes számot adjon meg a gyerek mellények számához! (NEGATÍV)");
+                        alert.showAndWait();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    // Ha az érték nem érvényes szám, akkor hibaüzenetet jelenítünk meg
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Hiba");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Kérjük, érvényes számot adjon meg a gyerek mellények számához!");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            //felnőtt-gumi
+            int FoglalasFelModGumi = 0;
+            if (!foglalasFelModGumi.getText().isEmpty()) {
+                try {
+                    FoglalasFelModGumi = Integer.parseInt(foglalasFelModGumi.getText().trim());
+                    if (FoglalasFelModGumi < 0) {
+                        // Ha az érték nem érvényes szám, akkor hibaüzenetet jelenítünk meg
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Hiba");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Kérjük, érvényes számot adjon meg a felnőtt mellények számához! (NEGATÍV)");
+                        alert.showAndWait();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    // Ha az érték nem érvényes szám, akkor hibaüzenetet jelenítünk meg
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Hiba");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Kérjük, érvényes számot adjon meg a felnőtt mellények számához!");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            ///////////////Ha mindekét felnőtt cucc üres
+            if (foglalasFelModMelleny.getText().isEmpty() && foglalasFelModGumi.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("Ha már bepipálta a felnőtt mezőt, akkor adjon meg adatot!");
+                alert.showAndWait();
+                return;
+            }
+
+            try {
+                if (!foglalasFelModMelleny.getText().isEmpty()) {
+                    felnottMelleny = Integer.parseInt(foglalasFelModMelleny.getText().trim());
+                }
+
+                if (!foglalasFelModGumi.getText().isEmpty()) {
+                    felnottGumi = Integer.parseInt(foglalasFelModGumi.getText().trim());
+                }
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("Hibás adat formátum a felnőtt gumiként megadott mezőben!");
+                alert.showAndWait();
+                return;
+            }
+        }
+        //
+
+        //GyerekMező
+        // gyerek mező és felszerelések kezelése
+        if (foglalasGyerekModCheckBox.isSelected()) {
+            int FoglaloModGyMelleny = 0;
+            if (!foglaloModGyMelleny.getText().isEmpty()) {
+                try {
+                    FoglaloModGyMelleny = Integer.parseInt(foglaloModGyMelleny.getText().trim());
+                    if (FoglaloModGyMelleny < 0) {
+                        // Ha az érték nem érvényes szám, akkor hibaüzenetet jelenítünk meg
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Hiba");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Kérjük, érvényes számot adjon meg a gyerek mellények számához! (NEGATÍV)");
+                        alert.showAndWait();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    // Ha az érték nem érvényes szám, akkor hibaüzenetet jelenítünk meg
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Hiba");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Kérjük, érvényes számot adjon meg a gyerek mellények számához!");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            //gyerek-gumi
+            int FoglaloModGyGumi = 0;
+            if (!foglaloModGyGumi.getText().isEmpty()) {
+                try {
+                    FoglaloModGyGumi = Integer.parseInt(foglaloModGyGumi.getText().trim());
+                    if (FoglaloModGyGumi < 0) {
+                        // Ha az érték nem érvényes szám, akkor hibaüzenetet jelenítünk meg
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Hiba");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Kérjük, érvényes számot adjon meg a gyerek mellények számához! (NEGATÍV)");
+                        alert.showAndWait();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    // Ha az érték nem érvényes szám, akkor hibaüzenetet jelenítünk meg
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Hiba");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Kérjük, érvényes számot adjon meg a gyerek mellények számához!");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            ///////////////Ha mindekét gyerek cucc üres és bepipálva a gyerek mező
+            if (foglaloModGyMelleny.getText().isEmpty() && foglaloModGyGumi.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("Ha már bepipálta a gyerekmezőt, akkor adjon meg adatot!");
+                alert.showAndWait();
+                return;
+            }
+
+            try {
+                if (!foglaloModGyMelleny.getText().isEmpty()) {
+                    gyerekMelleny = Integer.parseInt(foglaloModGyMelleny.getText().trim());
+                }
+
+                if (!foglaloModGyGumi.getText().isEmpty()) {
+                    gyerekGumi = Integer.parseInt(foglaloModGyGumi.getText().trim());
+                }
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("Hibás adat formátum a gyerek gumiként megadott mezőben!");
+                alert.showAndWait();
+                return;
+            }
+        }
+        //SQL biszbaszok
+        String tableName = "jovobeni_foglalasok";
+        try {
+            Connection conn = DriverManager.getConnection(url, user, password);
+            conn.setAutoCommit(false);
+            String sql1 = "WITH felszereles_osszesites AS (\n" +
+                    "\t\tSELECT \n" +
+                    "\t\tSUM(CASE WHEN nev = 'felnott_melleny' THEN darab ELSE 0 END) AS felszereles_felnott_melleny,\n" +
+                    "\t\tSUM(CASE WHEN nev = 'felnott_gumi' THEN darab ELSE 0 END) AS felszereles_felnott_gumi,\n" +
+                    "\t\tSUM(CASE WHEN nev = 'gyerek_melleny' THEN darab ELSE 0 END) AS felszereles_gyerek_melleny,\n" +
+                    "\t\tSUM(CASE WHEN nev = 'gyerek_gumi' THEN darab ELSE 0 END) AS felszereles_gyerek_gumi,\n" +
+                    "\t\tSUM(CASE WHEN nev = 'csonak' THEN darab ELSE 0 END) AS felszereles_csonak\n" +
+                    "\t\tFROM felszereles),\n" +
+                    "foglalasok_osszesites AS (\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND felnott_melleny > 0 THEN felnott_melleny ELSE 0 END) AS foglalasok_felnott_melleny,\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND felnott_gumi > 0 THEN felnott_gumi ELSE 0 END) AS foglalasok_felnott_gumi,\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND gyerek_melleny > 0 THEN gyerek_melleny ELSE 0 END) AS foglalasok_gyerek_melleny,\n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND gyerek_gumi > 0 THEN gyerek_gumi ELSE 0 END) AS foglalasok_gyerek_gumi, \n" +
+                    "\t\tSUM(CASE WHEN foglalasok.aktiv = TRUE AND foglalasok.datum=CURRENT_DATE AND csonak > 0 THEN csonak ELSE 0 END) AS foglalasok_csonak\n" +
+                    "\t\tFROM foglalasok),\n" +
+                    "jovobeni_foglalasok_osszesites AS (\n" +
+                    "\t\tSELECT\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=? AND felnott_melleny > 0 THEN felnott_melleny ELSE 0 END) AS jovobeni_foglalasok_felnott_melleny,\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=? AND felnott_gumi > 0 THEN felnott_gumi ELSE 0 END) AS jovobeni_foglalasok_felnott_gumi,\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=? AND gyerek_melleny > 0 THEN gyerek_melleny ELSE 0 END) AS jovobeni_foglalasok_gyerek_melleny,\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=? AND gyerek_gumi > 0 THEN gyerek_gumi ELSE 0 END) AS jovobeni_foglalasok_gyerek_gumi,\n" +
+                    "\t\tSUM(CASE WHEN jovobeni_foglalasok.aktiv = TRUE AND jovobeni_foglalasok.datum=? AND csonak > 0 THEN csonak ELSE 0 END) AS jovobeni_foglalasok_csonak\n" +
+                    "\t\tFROM jovobeni_foglalasok\n" +
+                    ")\n" +
+                    "SELECT\n" +
+                    "\t-- felnott_melleny:\n" +
+                    "\t--\tfelszereles_osszesites.felszereles_felnott_melleny,\n" +
+                    "\t--\tfoglalasok_osszesites.foglalasok_felnott_melleny,\n" +
+                    "\t--\tjovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_melleny,\n" +
+                    "\t\tfelszereles_osszesites.felszereles_felnott_melleny - foglalasok_osszesites.foglalasok_felnott_melleny - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_melleny AS elerheto_felnott_melleny,\n" +
+                    "\t\t\n" +
+                    "\t-- felnott_gumi:\n" +
+                    "\t-- felszereles_osszesites.felszereles_felnott_gumi,\n" +
+                    "    -- foglalasok_osszesites.foglalasok_felnott_gumi,\n" +
+                    "    -- jovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_gumi,\n" +
+                    "\t felszereles_osszesites.felszereles_felnott_gumi - foglalasok_osszesites.foglalasok_felnott_gumi - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_felnott_gumi AS elerheto_felnott_gumi,\n" +
+                    "\t\n" +
+                    "\t-- gyerek_melleny:\n" +
+                    "\t-- felszereles_osszesites.felszereles_gyerek_melleny,\n" +
+                    "    -- foglalasok_osszesites.foglalasok_gyerek_melleny,\n" +
+                    "    -- jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_melleny,\n" +
+                    "\t felszereles_osszesites.felszereles_gyerek_melleny - foglalasok_osszesites.foglalasok_gyerek_melleny - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_melleny AS elerheto_gyerek_melleny,\n" +
+                    "\t\n" +
+                    "\t-- gyerek_gumi:\n" +
+                    "\t-- felszereles_osszesites.felszereles_gyerek_gumi,\n" +
+                    "    -- foglalasok_osszesites.foglalasok_gyerek_gumi,\n" +
+                    "    -- jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_gumi,\n" +
+                    "\t felszereles_osszesites.felszereles_gyerek_gumi - foglalasok_osszesites.foglalasok_gyerek_gumi - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_gyerek_gumi AS elerheto_gyerek_gumi,\n" +
+                    "\t\n" +
+                    "\t-- csonak:\n" +
+                    "\t--\tfelszereles_osszesites.felszereles_csonak,\n" +
+                    "\t--\tfoglalasok_osszesites.foglalasok_csonak,\n" +
+                    "\t--\tjovobeni_foglalasok_osszesites.jovobeni_foglalasok_csonak,\n" +
+                    "\t\tfelszereles_osszesites.felszereles_csonak  - jovobeni_foglalasok_osszesites.jovobeni_foglalasok_csonak  - foglalasok_osszesites.foglalasok_csonak AS elerheto_csonak\n" +
+                    "FROM felszereles_osszesites, foglalasok_osszesites, jovobeni_foglalasok_osszesites;\n";
+            PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+            pstmt1.setString(1, selectedDateStr);
+            pstmt1.setString(2, selectedDateStr);
+            pstmt1.setString(3, selectedDateStr);
+            pstmt1.setString(4, selectedDateStr);
+            pstmt1.setString(5, selectedDateStr);
+            ResultSet rs = pstmt1.executeQuery();
+            if (rs.next()) {
+                int elerhetoFelnottMelleny = rs.getInt("elerheto_felnott_melleny");
+                int elerhetoFelnottGumi = rs.getInt("elerheto_felnott_gumi");
+                int elerhetoGyerekMelleny = rs.getInt("elerheto_gyerek_melleny");
+                int elerhetoGyerekGumi = rs.getInt("elerheto_gyerek_gumi");
+                int elerhetoCsonak = rs.getInt("elerheto_csonak");
+                if (felnottMelleny == 00 &&
+                        felnottGumi == 0 &&
+                        gyerekMelleny == 0 &&
+                        gyerekGumi == 0) {  //itt nincs csónak!
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Üres tábla");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Semmilyen foglalási adatot nem adott meg!");
+                    alert.showAndWait();
+                } else if (!(felnottMelleny > elerhetoFelnottMelleny)) {
+                    //String sql = "INSERT INTO " + tableName + " (nev, datum, felnott_melleny, felnott_gumi, gyerek_melleny, gyerek_gumi, csonak, aktiv) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+                    String sql = "UPDATE jovobeni_foglalasok SET felnott_melleny= ?, felnott_gumi = ?, gyerek_melleny=?, gyerek_gumi=? WHERE nev = ? AND datum = ? AND aktiv = 1";
+                    PreparedStatement pstmt = conn.prepareStatement(sql);
+                    if (!foglalasFelnottModCheckBox.isSelected()){
+                        pstmt.setInt(1, 0);
+                    }
+                    else{
+                        pstmt.setInt(1, felnottMelleny);
+                        }
+                    if (!foglalasFelnottModCheckBox.isSelected()){
+                        pstmt.setInt(2, 0);
+                    }
+                    else {
+                        pstmt.setInt(2, felnottGumi);
+                    }
+                    if (!foglalasGyerekModCheckBox.isSelected()){
+                        pstmt.setInt(3, 0);
+                    }
+                    else{
+                        pstmt.setInt(3, gyerekMelleny);
+                    }
+                    if (!foglalasGyerekModCheckBox.isSelected()){
+                        pstmt.setInt(4, 0);
+                    }
+                    else{
+                        pstmt.setInt(4, gyerekGumi);
+                    }
+                    pstmt.setString(5, FoglaloNev);
+                    pstmt.setString(6, selectedDateStr);
+                    //pstmt.setBoolean(7, FoglalasCsonakCheckBox);      //ebben a verzióban nincs lehetőség arra hogy a csónak foglalást módosítsuk!
+
+                    pstmt.executeUpdate();
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Sikeres foglalás");
+                    alert.setHeaderText(null);
+                    alert.setContentText("A foglalás sikeresen rögzítve az adatbázisba!");
+                    alert.showAndWait();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Hiba");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Hiba történt az adatok mentése során- nincs annyi cucc!");
+                    alert.showAndWait();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("Hiba történt az adatok mentése során- dasz tudjac!");
+                alert.showAndWait();
+            }
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("Hiba történt az adatok mentése során!");
+            alert.showAndWait();
+            e.printStackTrace();
+        }
+        //SQL vége
+        //beírt adatok törlése
+        foglaloModNeve.setText("");
+        foglalasFelModMelleny.setText("");
+        foglalasFelModGumi.setText("");
+        foglaloModGyMelleny.setText("");
+        foglaloModGyGumi.setText("");
+        foglalasModDatePicker.setValue(null);
     }
 
     @FXML

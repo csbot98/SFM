@@ -181,7 +181,7 @@
                                 <Text layoutX="303.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás napja:" wrappingWidth="100.03125" />
                                 <DatePicker fx:id="foglalasDatePicker" layoutX="368.0" layoutY="208.0" promptText="2023-05-01" />
                                 <Button fx:id="foglalasGomb" layoutX="259.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleFoglalasGomb" text="Foglalás" />
-                        <CheckBox fx:id="foglalasCsonakCheckBox" layoutX="35.0" layoutY="169.0" mnemonicParsing="false"  text="Csónak" />
+                        <CheckBox fx:id="foglalasCsonakCheckBox" layoutX="35.0" layoutY="169.0" mnemonicParsing="false" text="Csónak" />
                             </children>
                         </AnchorPane>
                     </content>
