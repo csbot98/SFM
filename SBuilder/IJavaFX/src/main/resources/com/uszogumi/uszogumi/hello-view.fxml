@@ -150,8 +150,8 @@
                                 <TextField fx:id="foglaloFelnottMelleny" layoutX="147.0" layoutY="102.0" prefHeight="25.0" prefWidth="71.0" promptText="(Max: 10)" />
                                 <Text layoutX="35.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Felnőtt úszógumi:" wrappingWidth="98.03125" />
                                 <TextField fx:id="foglaloFelnottGumi" layoutX="146.0" layoutY="135.0" prefHeight="25.0" prefWidth="72.0" promptText="(Max: 9)" />
-                                <CheckBox fx:id="foglalasGyerekCheckBox" layoutX="34.0" layoutY="177.0" mnemonicParsing="false" onAction="#foglalasGyerekCheckBoxOn" text="Gyerek felszerelések" />
-                                <Group fx:id="foglalasHiddenGyerekGroup" layoutX="34.0" layoutY="208.0" visible="false">
+                                <CheckBox fx:id="foglalasGyerekCheckBox" layoutX="35.0" layoutY="200.0" mnemonicParsing="false" onAction="#foglalasGyerekCheckBoxOn" text="Gyerek felszerelések" />
+                                <Group fx:id="foglalasHiddenGyerekGroup" layoutX="41.0" layoutY="221.0" visible="false">
                                     <children>
                                         <VBox layoutY="4.0">
                                             <children>
@@ -181,6 +181,7 @@
                                 <Text layoutX="303.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás napja:" wrappingWidth="100.03125" />
                                 <DatePicker fx:id="foglalasDatePicker" layoutX="368.0" layoutY="208.0" promptText="2023-05-01" />
                                 <Button fx:id="foglalasGomb" layoutX="259.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleFoglalasGomb" text="Foglalás" />
+                        <CheckBox fx:id="foglalasCsonakCheckBox" layoutX="35.0" layoutY="169.0" mnemonicParsing="false"  text="Csónak" />
                             </children>
                         </AnchorPane>
                     </content>

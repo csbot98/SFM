@@ -1,1 +1,29 @@
-hello
+Muszáj vagyok leírni, hogy hol járok már pontosan és mit csinál az app.
+
+Először is szeretném leszögezni, hogy nagyon pacek már most! (05.07).
+
+DB: [MYSQL]
+(A szükséges SQL kódok másik fájlban vannak.)
+Van 3 táblám.
+-felszereles: itt meg van adva konstnas módon, hogy milyen felszerelések vannak és azokból mennyi darab van. (Ez sose kerül módosításra.)
+
+Fontos: Nos az SQL kódjaim kimagaslóan precízek, viszont egyetlen egy kis porszem mégiscsak akad a gépezetben:
+	Kell egy (1) sor ahol full 0 értékek vannak megadva.
+
+-foglalasok: ez a tábla arra szolgál, hogy aki "helyben" foglal aznapra. Név, foglalni kívánt felszerelések mennyisége.
+
+-jovobeni_foglalasok: ez olyan mint, a sima foglalasok, csak ezzel előre le lehet foglalni.
+
+-Csekkolás fül:
+	Van egy "Csekkolás" gomb, amivel frissíteni lehet, hogy éppen mennyi a szabadon elérhető felszerelések száma. Az SQL lekérdezés, figyelembe veszi a felszerelesek darab számát, hogy aznap mennyien foglaltak már le az adott felszerelésből és a jovobeni foglalasok táblát is figyelembe veszi, hogy ha már valaki lefoglalta egy héttel előre a felszerelést és eljött a napja, akkor már beleveszi a foglaltba.
+
+-Azonnali foglalás:
+	Megadjuk az adatokat és gomb nyomásra felviszi a foglalást a "foglalasok" táblába. Nagyjából, megtörtént a hibakezelés, tehát ha valaki többet akar foglalni mint amennyi van vagy full üres adatot akar beküldeni vagy ha bepipálta a gyerek menüt és mégse ír oda semmit, akkor szól, hogy "helloo!!!". Ha pedig valami már nem elérhető, akkor disabled lesz az az eszköz. A mögötte lévő SQL kód szintén figyelembe vesz mindenféle aznapi és jövöbeni foglalást. Még ha időközben felszabadul pár felszerelés is (erről majd később).
+
+-Foglalás:
+	Megadjuk a napot és hogy milyen felszereléseket szeretnénk lefoglalni. Az SQL kód itt is kitér mindenre
+//Ami talán hiányzik, egy csekkolás hogy az adott napra háyn felszerelés érhető el,de majd a(z) 1.2v-ben patchelve lesz ;)
+
+
+
+-Mondanám hogy Anonymus, de ezt én csináltam...
