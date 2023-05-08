@@ -13,6 +13,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
@@ -311,7 +312,8 @@
                                         </Text>
                                     </children>
                                 </VBox>
-                                <Text layoutX="287.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Csengeri Ákos" />
+                                <Text layoutX="308.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="???" />
+                                <Label fx:id="hiddenMeglepetes" layoutX="259.0" layoutY="14.0" prefHeight="17.0" prefWidth="53.0" />
                                 <Line endX="100.0" layoutX="231.0" layoutY="184.0" startX="-100.0" />
                                 <Text layoutX="141.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="További készítők:" />
                                 <VBox layoutX="285.0" layoutY="205.0">
@@ -333,6 +335,12 @@
                                         </Text>
                                     </children>
                                 </VBox>
+                                <Button fx:id="leirasMeglepetes" layoutX="491.0" layoutY="314.0" mnemonicParsing="false" onAction="#handleLeirasMeglepetes" text="Tovább" />
+                        <Text fx:id="leirasMeglepetesText" layoutX="40.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nyomd meg a gombot, ha látni akarod az ezermester valódi kilétét." underline="true">
+                           <effect>
+                              <GaussianBlur radius="2.97" />
+                           </effect>
+                        </Text>
                             </children>
                         </AnchorPane>
                     </content>
@@ -345,8 +353,6 @@
                                 <Text layoutX="15.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A &quot;Foglalás&quot; fülön egy megadott napon a vásárló képés előre lefoglalni az úszóeszközöket." wrappingWidth="570.1484375" />
                                 <Text layoutX="15.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ugyanazon a fülön egy &quot;Azonnali foglalás&quot; opció is rendelkezésre áll, ahol értelemszerűen a megadott adatok alapján bérelni lehet. A fizetés pedig a kasszánál történik. (Fontos: ez egy kissebb strand és a program is kezdetleges, így kérem vegyék figyelembe, hogy vagy-vagy alapon mükődik az úszógumi és mellény bérlés. Megértésüket köszönjük.)" wrappingWidth="570.1484375" />
                                 <Text layoutX="15.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A &quot;Foglalás módosítás&quot; és &quot;Foglalás lemondás&quot; fül magáért beszél. Meg kell adni a már korábban megadott foglaló nevét és vagy módosítani lehet a foglalást vagy pedig akár törölni az egészet." wrappingWidth="570.1484375" />
-                                <Button fx:id="leirasMeglepetes" layoutX="249.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleLeirasMeglepetes" text="Ne nyomd meg!" />
-                                <Label fx:id="hiddenMeglepetes" layoutX="274.0" layoutY="236.0" prefHeight="17.0" prefWidth="53.0" />
                             </children>
                         </AnchorPane>
                     </content>
