@@ -1,0 +1,42 @@
+.root{
+    -fx-background-color: lightblue;
+
+
+}
+
+.button{
+    -fx-background-color: yellow;
+    -fx-text-fill: rgba(0,0,0,1);
+    -fx-padding: 10px, 30px;
+    -fx-font-weight:900;
+    -fx-border-color: rgba(0,0,0,1);
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+
+
+}
+
+//.check-box .box{
+    //-fx-background-color: yellow;
+    //-fx-border-color: rgba(0,0,0,1);
+    //-fx-border-radius: 5;
+//}
+
+//.radio-button{
+    //-fx-background-color: yellow;
+    //-fx-border-color: rgba(0,0,0,1);
+    //-fx-border-radius: 5;
+
+//}
+
+.label{
+    -fx-font-size: 25;
+    -fx-text-fill:"grey";
+}
+
+.text{
+    -fx-text-fill: "red";
+
+
+}
+
